@@ -1,0 +1,24 @@
+{
+  "name": "bank_transaction",
+  "version": "1.0.0",
+  "description": "\"Bank Transaction project\"",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sathishceg/bank_transaction.git"
+  },
+  "dependencies": {
+    "express": "4.16.3",
+    "mysql": "2.16.0",
+    "body-parser": "^1.17.2",
+  },
+  "author": "SathishBabu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sathishceg/bank_transaction/issues"
+  },
+  "homepage": "https://github.com/sathishceg/bank_transaction#readme"
+}
