@@ -5,17 +5,52 @@ const FIELDS = {
   acc_no: 'account_number'
 };
 
+function insertOrUpdate(amount, acc_num){
+  return new Promise((resolve, reject) => {
+    const query = `INSERT INTO ${TABLE_NAME} SET ${FIELDS.acc_no} = ?, ${FIELDS.balance} = ? ON DUPLICATE KEY UPDATE balance = balance + ?`;
+    db.connection.query(query, [acc_num, amount, amount], (error, results, fields) => {
+      if(error){
+        connection.rollback(function() {
+          reject();
+        });
+      }
+      resolve();
+    });
+  });
+}
+
+function beginTransaction(){
+  return new Promise((resolve, reject) => {
+    db.connection.query('START TRANSACTION',function(err) {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+function commitTransaction(){
+  return new Promise((resolve, reject) => {
+    db.connection.query('COMMIT',function(err) {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
 class Balance{
 
-  add_balance(amount, acc_num, cb){
-    const query = `INSERT INTO ${TABLE_NAME} (${FIELDS.balance}, ${FIELDS.acc_no}) values (?, ?)`;
-    db.execute_query(query, [amount, acc_num], (error, results) => {
-
-    });
+  async updateBalance(amount, acc_num){
+    await beginTransaction();
+    await insertOrUpdate(amount, acc_num);
+    await commitTransaction();
   }
 
   get_account_balance(){
-    
+
   }
 }
 

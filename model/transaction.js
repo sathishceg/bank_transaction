@@ -12,13 +12,13 @@ class Transaction{
       account_number: from_acc
     };
     return new Promise((resolve, reject) => {
-      db.execute_query(query, data, (error, results, fields) => {
+      db.connection.query(query, data, (error, results, fields) => {
         if(error){
           return reject(error)
         }
         return resolve(results);
       });
-    })
+    });
 
   }
 }
