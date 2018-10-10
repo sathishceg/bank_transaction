@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const PORT = 3000;
 const routes = require('./lib/routes');
 const db = require('./lib/db');
+const BOOTSTRAP = 'bootstrap';
 
 app.use(bodyParser.json());
 app.use('/',routes);
@@ -19,7 +20,13 @@ function startServer(){
 }
 
 async function setup(){
+  const arg = process.argv.slice(2)[0];
   await db.connect();
+  if(arg && arg == BOOTSTRAP){
+    await db.createBalanceTable();
+    await db.createTransactionsTable();
+    await db.createRecords();
+  }
   await startServer();
 }
 
