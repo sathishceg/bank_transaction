@@ -50,6 +50,18 @@ function beginTransaction(){
   });
 }
 
+function lockRecord(from_acc, to_acc){
+  return new Promise((resolve, reject) => {
+    const query = `SELECT ${FIELDS.balance} FROM ${TABLE_NAME} where ${FIELDS.acc_no} in (?) FOR UPDATE `;
+    db.connection.query(query, [from_acc,to_acc], (error, results, fields) => {
+      if (error) {
+        reject(error);
+      }
+      resolve();
+    });
+  });
+}
+
 function commitTransaction(){
   return new Promise((resolve, reject) => {
     db.connection.query('COMMIT',function(err) {
@@ -72,6 +84,7 @@ class Balance{
 
   async updateBalance(amount, to_acc_num, from_acc_num){
     await beginTransaction();
+    await lockRecord(from_acc_num, to_acc_num);
     await insertOrUpdateToAccount(amount, to_acc_num);
     await updateFromAccount(amount, from_acc_num);
     await commitTransaction();
